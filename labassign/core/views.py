@@ -11,8 +11,14 @@ def create_petition(request):
 
         if form.is_valid():
             try:
-                existente = Pair.objects.get(student1=form.student2)
-                existente = Pair.objects.get(student2=form.student1)
-                existente.validated=True
+                existente1 = Pair.objects.get(student1=form.student2)
+                existente2 = Pair.objects.get(student2=form.student1)
+                if (existente1==existente2):
+                    existente.validated=True
             except Pair.DoesNotExist:
                 pair = form.save()
+
+        else:
+            print(form.errors)
+
+    return

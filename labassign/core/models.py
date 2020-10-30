@@ -7,14 +7,14 @@ class Teacher(models.Model):
     last_name = models.CharField(blank=False, max_length=50)
 
     def __str__(self):
-        return self.first_name + self.last_name
+        return self.first_name + ' ' + self.last_name
 
 
 class LabGroup(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    groupName = models.CharField(blank=False, max_length=50)
+    groupName = models.CharField(blank=False, max_length=50, unique=True)
     language = models.CharField(blank=False, max_length=50)
-    schedule = models.CharField(blank=False, max_length=50)
+    schedule = models.CharField(blank=False, max_length=150)
     maxNumberStudents = models.IntegerField(default=1)
     counter = models.IntegerField(default=0)
 
@@ -29,7 +29,7 @@ class LabGroup(models.Model):
 
 
 class TheoryGroup(models.Model):
-    groupName = models.CharField(blank=False, max_length=50)
+    groupName = models.CharField(blank=False, max_length=50, unique=True)
     language = models.CharField(blank=False, max_length=50)
 
     def __str__(self):
@@ -76,7 +76,7 @@ class OtherConstraints(models.Model):
         super(OtherConstraints, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.id
+        return "acho" #cambiar esto por algo que tenga sentido
 
 
 class GroupConstraints(models.Model):
@@ -84,8 +84,7 @@ class GroupConstraints(models.Model):
     labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.id
-
+        return self.TheoryGroup.groupName + ' ' + self.labGroup.groupName
 
 class Pair(models.Model):
     student1 = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student1')
