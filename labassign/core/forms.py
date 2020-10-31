@@ -6,7 +6,7 @@ MAX_LENGTH = 128
 class PairForm(forms.ModelForm):  
     class Meta:
         model = Pair
-        exclude = ('studentBreakRequest',)
+        exclude = ('studentBreakRequest', 'validated')
 
 
 class StudentForm(forms.ModelForm):
@@ -14,5 +14,13 @@ class StudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ('username', 'password', 'first_name', 'last_name', 'gradeTheoryLastYear', 'gradeLabLastYear', 'labGroup', 'theoryGroup', 'convalidationGranted')
+        fields = ('username',
+                  'password',
+                  'first_name',
+                  'last_name',
+                  'gradeTheoryLastYear',
+                  'gradeLabLastYear',
+                  'labGroup',
+                  'theoryGroup',
+                  'convalidationGranted')
         

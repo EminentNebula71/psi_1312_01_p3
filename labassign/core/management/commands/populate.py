@@ -9,11 +9,25 @@
 
 
 from django.core.management.base import BaseCommand
+from django.core.exceptions import ObjectDoesNotExist
 from core.models import (OtherConstraints, Pair, Student,
                          GroupConstraints, TheoryGroup,
                          LabGroup, Teacher)
 from django.utils import timezone
 import csv
+import re
+
+maxNStudents=23
+
+def add_pair(student1, student2):
+    try:
+        p = Pair.objects.get(student1=Student.objects.get(username=student2),
+                             student2=Student.objects.get(username=student1))
+        p.validated=True
+        p.save()
+    except ObjectDoesNotExist:
+        p = Pair.objects.get_or_create(student1=Student.objects.get(username=student1),
+                                       student2=Student.objects.get(username=student2))
 
 
 # The name of this class is not optional must be Command
@@ -89,59 +103,74 @@ class Command(BaseCommand):
 
     def teacher(self):
         "create teachers here"
-        c = Teacher.objects.get_or_create(first_name="Carlos", last_name="Santa Cruz")[0]
-        c = Teacher.objects.get_or_create(first_name="Francisco", last_name="de Borja")[0]
-        c = Teacher.objects.get_or_create(first_name="Pablo", last_name="Castells")[0]
-        c = Teacher.objects.get_or_create(first_name="Roberto", last_name="Marabini")[0]
-        c = Teacher.objects.get_or_create(first_name="Álvaro", last_name="del Val")[0]
+        c = Teacher.objects.get_or_create(first_name="No", last_name="Asignado1")[0]
+        c = Teacher.objects.get_or_create(first_name="No", last_name="Asignado4")[0]
+        c = Teacher.objects.get_or_create(first_name="Alvaro", last_name="del Val Latorre")[0]
+        c = Teacher.objects.get_or_create(first_name="Julia", last_name="Diaz Garcia")[0]
+        c = Teacher.objects.get_or_create(first_name="Roberto", last_name="Marabini Ruiz")[0]
+
 
     def labgroup(self):
+        # Idiomas
+        esp = "español/Spanish"
+        ing='inglés/English'
+        # Horario
+        lt='Lunes/Monday 18-20'
+        x='Miércoles/Wednesday 18-20'
+        v='Viernes/Friday 17-19'
         "add labgroups"
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Álvaro"), groupName='1263', language='Español', schedule='17 a 19 los viernes', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Pablo"), groupName='1261', language='Español', schedule='18 a 20 los lunes', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Carlos"), groupName='1262', language='Español', schedule='18 a 20 los miércoles', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Francisco"), groupName='1271', language='Español', schedule='18 a 20 los miércoles', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Carlos"), groupName='1272', language='Español', schedule='17 a 19 los viernes', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Álvaro"), groupName='1273', language='Español', schedule='17 a 19 los viernes', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Roberto"), groupName='1291', language='Inglés', schedule='18 a 20 los lunes', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Roberto"), groupName='1292', language='Inglés', schedule='17 a 19 los viernes', maxNumberStudents=30)
-        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Roberto"), groupName='1201', language='Inglés', schedule='17 a 19 los viernes', maxNumberStudents=30)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Roberto"), groupName='1201', language=esp, schedule=x, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(last_name="Asignado1"), groupName='1261', language=esp, schedule=lt, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(last_name="Asignado4"), groupName='1262', language=esp, schedule=x, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(last_name="Asignado4"), groupName='1263', language=esp, schedule=v, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(last_name="Asignado1"), groupName='1271', language=esp, schedule=x, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Alvaro"), groupName='1272', language=esp, schedule=v, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Alvaro"), groupName='1291', language=ing, schedule=lt, maxNumberStudents=maxNStudents)
+        l = LabGroup.objects.get_or_create(teacher=Teacher.objects.get(first_name="Julia"), groupName='1292', language=ing, schedule=v, maxNumberStudents=maxNStudents)
         
     def theorygroup(self):
+        esp = "español/Spanish"
+        ing='inglés/English'
         "add theorygroups"
-        t = TheoryGroup.objects.get_or_create(groupName="126", language="Español")
-        t = TheoryGroup.objects.get_or_create(groupName="127", language="Español")
-        t = TheoryGroup.objects.get_or_create(groupName="120", language="Español")
-        t = TheoryGroup.objects.get_or_create(groupName="125", language="Español")
-        t = TheoryGroup.objects.get_or_create(groupName="129", language="Inglés")
+        t = TheoryGroup.objects.get_or_create(groupName="120", language=esp)
+        t = TheoryGroup.objects.get_or_create(groupName="125", language=ing)
+        t = TheoryGroup.objects.get_or_create(groupName="126", language=esp)
+        t = TheoryGroup.objects.get_or_create(groupName="127", language=esp)
+        t = TheoryGroup.objects.get_or_create(groupName="129", language=ing)
 
     def groupconstraints(self):
         "add group constrints"
         """ Follows which laboratory groups (4th column
             may be choosen by which theory groups (2nd column)
-theoryGroup: 126, labGroup: 1261
-theoryGroup: 126, labGroup: 1262
-theoryGroup: 126, labGroup: 1263
-theoryGroup: 127, labGroup: 1271
-theoryGroup: 127, labGroup: 1272
-theoryGroup: 120, labGroup: 1201
-theoryGroup: 129, labGroup: 1291
-theoryGroup: 125, labGroup: 1292"""
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="126"), labGroup=LabGroup.objects.get(groupName="1261"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="126"), labGroup=LabGroup.objects.get(groupName="1262"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="126"), labGroup=LabGroup.objects.get(groupName="1263"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="127"), labGroup=LabGroup.objects.get(groupName="1271"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="127"), labGroup=LabGroup.objects.get(groupName="1272"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="120"), labGroup=LabGroup.objects.get(groupName="1201"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="129"), labGroup=LabGroup.objects.get(groupName="1291"))
-        g = GroupConstraints.objects.get_or_create(TheoryGroup=TheoryGroup.objects.get(groupName="125"), labGroup=LabGroup.objects.get(groupName="1292"))
+                theoryGroup: 126, labGroup: 1261
+                theoryGroup: 126, labGroup: 1262
+                theoryGroup: 126, labGroup: 1263
+                theoryGroup: 127, labGroup: 1271
+                theoryGroup: 127, labGroup: 1272
+                theoryGroup: 120, labGroup: 1201
+                theoryGroup: 129, labGroup: 1291
+                theoryGroup: 125, labGroup: 1292"""
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="126"), labGroup=LabGroup.objects.get(groupName="1261"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="126"), labGroup=LabGroup.objects.get(groupName="1262"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="126"), labGroup=LabGroup.objects.get(groupName="1263"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="127"), labGroup=LabGroup.objects.get(groupName="1271"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="127"), labGroup=LabGroup.objects.get(groupName="1272"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="120"), labGroup=LabGroup.objects.get(groupName="1201"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="129"), labGroup=LabGroup.objects.get(groupName="1291"))
+        g = GroupConstraints.objects.get_or_create(theoryGroup=TheoryGroup.objects.get(groupName="125"), labGroup=LabGroup.objects.get(groupName="1292"))
      
-
 
     def pair(self):
         "create a few valid pairs"
-        # remove pass and ADD CODE HERE
-        pass
+        # Pareja valida
+        add_pair('464353', '460168')
+        add_pair('460168', '464353')
+        # Peticion no valida
+        add_pair('499264', '470075')
+        # Peticion triangulo
+        add_pair('468608', '447012')
+        add_pair('447012', '462402')
+        add_pair('462402', '468608')
 
     def otherconstrains(self):
         """create a single object here with staarting dates
@@ -157,11 +186,46 @@ theoryGroup: 125, labGroup: 1292"""
     def student(self, csvStudentFile):
         # read csv file
         # structure NIE	DNI	Apellidos	Nombre	group-Teoría
-        # remove pass and ADD CODE HERE
-        pass
+        with open(csvStudentFile, mode='r') as csv_file:
+            info = csv.reader(csv_file, delimiter=',')
+            i = 0
+
+            for row in info:
+                if i > 0:
+                    Student.objects.get_or_create(username = row[0],
+                                                  password = row[1],
+                                                  last_name = row[2],
+                                                  first_name = row[3],
+                                                  theoryGroup = TheoryGroup.objects.get(groupName=row[4]))
+                i += 1
 
     def studentgrade(self, cvsStudentFileGrades):
         # read csv file
         # structure NIE	DNI	Apellidos	Nombre	group-Teoría	grade-practicas	gradeteoria
-        # remove pass and ADD CODE HERE
-        pass
+        with open(cvsStudentFileGrades, mode='r') as csv_file:
+            info = csv.reader(csv_file, delimiter=',')
+            i = 0
+
+            for row in info:
+                if i > 0:
+                    try :
+                        s = Student.objects.get(username=row[0])
+                        s.delete()
+                        Student.objects.get_or_create(username = row[0],
+                                                    password = row[1],
+                                                    last_name = row[2],
+                                                    first_name = row[3],
+                                                    theoryGroup = TheoryGroup.objects.get(groupName=row[4]),
+                                                    gradeLabLastYear=float(row[5]),
+                                                    gradeTheoryLastYear=float(row[6]))
+                    except ObjectDoesNotExist:
+                        Student.objects.get_or_create(username = row[0],
+                                                    password = row[1],
+                                                    last_name = row[2],
+                                                    first_name = row[3],
+                                                    theoryGroup = TheoryGroup.objects.get(groupName=row[4]),
+                                                    gradeLabLastYear=float(row[5]),
+                                                    gradeTheoryLastYear=float(row[6]),
+                                                    labGroup = LabGroup.objects.get(groupName='1261')) #CUIDADO HAY QUE ARREGLAR ESTO
+   
+                i += 1

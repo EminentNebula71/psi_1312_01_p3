@@ -37,7 +37,7 @@ class TheoryGroup(models.Model):
 
 
 class Student(AbstractBaseUser):
-    labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE)
+    labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE, null=True)
     theoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE)
     first_name = models.CharField(blank=False, max_length=50)
     last_name = models.CharField(blank=False, max_length=50)
@@ -58,7 +58,7 @@ class Student(AbstractBaseUser):
         super(Student, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.first_name + self.last_name
+        return self.first_name + ' ' + self.last_name
 
 
 class OtherConstraints(models.Model):
@@ -80,17 +80,20 @@ class OtherConstraints(models.Model):
 
 
 class GroupConstraints(models.Model):
-    TheoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE)
+    theoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE)
     labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.TheoryGroup.groupName + ' ' + self.labGroup.groupName
+        return self.theoryGroup.groupName + ' ' + self.labGroup.groupName
 
 class Pair(models.Model):
     student1 = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student1')
     student2 = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student2')
     validated = models.BooleanField(default=False)
-    studentBreakRequest = models.ForeignKey(Student, on_delete=models.CASCADE)
+    studentBreakRequest = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.student1 + self.student2
+        if(self.validated == True):
+            return self.student1.first_name + ' y ' + self.student2.first_name
+        else:
+            return self.student1.first_name

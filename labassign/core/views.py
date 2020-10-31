@@ -14,7 +14,7 @@ def create_petition(request):
                 existente1 = Pair.objects.get(student1=form.student2)
                 existente2 = Pair.objects.get(student2=form.student1)
                 if (existente1==existente2):
-                    existente.validated=True
+                    existente1.validated=True
             except Pair.DoesNotExist:
                 pair = form.save()
 
