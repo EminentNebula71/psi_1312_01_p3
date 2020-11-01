@@ -84,7 +84,7 @@ class GroupConstraints(models.Model):
     labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.theoryGroup.groupName + ' ' + self.labGroup.groupName
+        return self.theoryGroup.groupName + ', ' + self.labGroup.groupName
 
 class Pair(models.Model):
     student1 = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student1')

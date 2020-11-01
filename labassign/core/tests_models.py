@@ -40,7 +40,7 @@ class ModelTests(TestCase):
                          "Error: wrong number of %s" % str(_class))
         counter=1
         for t1, t2 in zip(dataBaseModelQS, modelQS):
-            print(counter, t1,t2)
+            print(counter, t1, t2)
             for attrb in compareAtrbList:
                 self.assertEqual(getattr(t1, attrb), getattr(t2, attrb),
                                  "Error: different %s" % attrb)
