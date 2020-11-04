@@ -39,6 +39,7 @@ class ModelTests(TestCase):
         self.assertEqual(len(dataBaseModelQS), len(modelQS),
                          "Error: wrong number of %s" % str(_class))
         counter=1
+        print(TheoryGroup.objects.all())
         for t1, t2 in zip(dataBaseModelQS, modelQS):
             print(counter, t1, t2)
             for attrb in compareAtrbList:

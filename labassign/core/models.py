@@ -32,6 +32,9 @@ class TheoryGroup(models.Model):
     groupName = models.CharField(blank=False, max_length=50, unique=True)
     language = models.CharField(blank=False, max_length=50)
 
+    class Meta:
+        ordering = ['groupName']
+
     def __str__(self):
         return self.groupName
 
@@ -62,7 +65,7 @@ class Student(AbstractBaseUser):
 
 
 class OtherConstraints(models.Model):
-    selectGroupStartDate = models.DateTimeField(default=timezone.now())
+    selectGroupStartDate = models.DateTimeField(default=timezone.now)
     minGradeTheoryConv = models.FloatField(blank=False)
     minGradeLabConv = models.FloatField(blank=False)
 
@@ -83,8 +86,12 @@ class GroupConstraints(models.Model):
     theoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE)
     labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['labGroup', 'theoryGroup']
+
     def __str__(self):
         return self.theoryGroup.groupName + ', ' + self.labGroup.groupName
+
 
 class Pair(models.Model):
     student1 = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student1')
