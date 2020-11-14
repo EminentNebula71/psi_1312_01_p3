@@ -27,7 +27,7 @@ SECRET_KEY = '*0s+n29rcr=zkorv0aa+6q42!a$%*1jtnpfn83hel@ni_(sxbk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [u'floating-ocean-81816.herokuapp.com', u'localhost', u'127.0.0.1']
 
 
 # Application definition
@@ -76,14 +76,14 @@ WSGI_APPLICATION = 'labassign.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.path.join(BASE_DIR, 'psi'),
-    }
+DATABASES = {}
+if os.getenv('SQLITE', False):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 }
-DATABASES['default'] = dj_database_url.config(
-    default='postgres://alumnodb:alumnodb@localhost:5432/psi')
+else:
+    DATABASES['default'] = dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi')
 
 
 # Password validation
@@ -125,3 +125,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #AUTH_USER_MODEL = 'core.Student'
+
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+DATABASES['default']= dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi')
+STATIC_ROOT = 'staticfiles'
