@@ -1,11 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
+from django.db.models.functions import Upper
 
 
 class Teacher(models.Model):
     first_name = models.CharField(blank=False, max_length=50)
     last_name = models.CharField(blank=False, max_length=50)
+
+    class Meta:
+        ordering = [Upper('last_name'), 'first_name']
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
@@ -58,7 +62,7 @@ class Student(AbstractBaseUser):
     USERNAME_FIELD = 'username'
 
     class Meta:
-        ordering = ['last_name', 'first_name']
+        ordering = [Upper('last_name'), 'first_name']
 
     def save(self, *args, **kwargs):
         if(self.gradeTheoryLastYear < 0.0):
@@ -117,6 +121,13 @@ class Pair(models.Model):
         null=True)
 
     def __str__(self):
-        return self.student1.first_name
-        + ' ' + self.student2.first_name
-        + ' ' + str(self.validated)
+        return "\nstudent1 --> (%d) %s, %s \n" \
+               "student2 --> (%d) %s, %s. Val =%r\n" % \
+               (self.student1.id, self.student1.last_name,
+                self.student1.first_name, self.student2.id,
+                self.student2.last_name, self.student2.first_name,
+                self.validated)
+
+    class Meta:
+        ordering = ['student1__id', 'student2__id']
+

@@ -127,6 +127,8 @@ STATIC_URL = '/static/'
 #AUTH_USER_MODEL = 'core.Student'
 
 # Parse database configuration from $DATABASE_URL
+"""
 import dj_database_url
 DATABASES['default']= dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi')
+"""
 STATIC_ROOT = 'staticfiles'
