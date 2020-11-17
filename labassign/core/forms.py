@@ -23,4 +23,12 @@ class StudentForm(forms.ModelForm):
                   'labGroup',
                   'theoryGroup',
                   'convalidationGranted')
+
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = Student
+        fields = ('username', 'password')
         

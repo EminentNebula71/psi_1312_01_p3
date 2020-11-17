@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from core.models import Pair, Student
 from core.forms import PairForm, StudentForm
-from django.contrib.auth import authenticate
 from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
 
 def user_login(request):
     if request.method == 'POST':
@@ -11,7 +12,7 @@ def user_login(request):
 
         user = authenticate(username=username, password=password)
 
-        if user:
+        if user is not None:
             if user.is_active:
                 login(request, user)
                 return redirect(reverse('core:home'))

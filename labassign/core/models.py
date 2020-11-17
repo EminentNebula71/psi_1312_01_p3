@@ -60,6 +60,7 @@ class Student(AbstractBaseUser):
     password = models.CharField(blank=False, max_length=50)
 
     USERNAME_FIELD = 'username'
+    PASSWORD_FIELD = 'password'
 
     class Meta:
         ordering = [Upper('last_name'), 'first_name']
