@@ -50,7 +50,8 @@ class Student(AbstractUser):
     gradeTheoryLastYear = models.FloatField(default=0.0)
     gradeLabLastYear = models.FloatField(default=0.0)
     convalidationGranted = models.BooleanField(default=False)
-
+    es_pareja = models.IntegerField(default=0)
+    
     class Meta:
         ordering = [Upper('last_name'), 'first_name']
 

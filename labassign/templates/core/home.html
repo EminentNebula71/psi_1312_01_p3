@@ -8,6 +8,7 @@
     <h1>Home</h1>
     <div>
         {% if user.is_authenticated %}
+            Summary page for <b>{{ user.first_name }}</b></br>
             Nombre: {{ user.first_name }}
             </br>
             Apellidos: {{ user.last_name }}
@@ -15,10 +16,10 @@
             Estado de convalidación: {{ user.convalidationGranted }}
             </br></br>
 
-            Pareja:
-            </br>
             {% for p in pairs %}
                 {% if user.id == p.student1.id %}
+                    Pareja:
+                    </br>
                     - Estudiante 1: {{ p.student1.first_name }} {{ p.student1.last_name }}
                     </br>
                     - Estudiante 2: {{ p.student2.first_name }} {{ p.student2.last_name }}
@@ -27,15 +28,17 @@
                 {% endif %}
             {% endfor %}
 
-            {% if  %}
-                {% if user.convalidationGranted == False %}
-                    <form id="convalidate" method="post" action="{% url 'core:convalidate' %}">
-                        <input type="hidden" name="username" value={{ user.first_name }} /> <!-- esto puede fallar -->
-                        <input type="submit" value="Convalidar" />
-                    </form>
-                {% endif %}
-            {% endif %}
-
+            
+            {% if user.es_pareja == 0 %}
+                        {% if user.convalidationGranted == False %}
+                        <form id="convalidation" method="post" action="{% url 'core:convalidation' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="username" value={{ user.username }} /> <!-- esto puede fallar -->
+                            <input type="submit" value="convalidate" />
+                        </form>
+                        {% endif %}
+                    {% endif %}
+                    </br></br>
             Grupo practicas: {{ user.labGroup }}
         {% endif %}
     </div>
