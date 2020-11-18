@@ -57,10 +57,9 @@ class Student(AbstractBaseUser):
         max_length=50,
         unique=True,
         default='default')
-    password = models.CharField(blank=False, max_length=50)
+    password = models.CharField(blank=False, max_length=100)
 
     USERNAME_FIELD = 'username'
-    PASSWORD_FIELD = 'password'
 
     class Meta:
         ordering = [Upper('last_name'), 'first_name']

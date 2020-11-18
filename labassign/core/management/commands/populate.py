@@ -15,6 +15,7 @@ from core.models import (OtherConstraints, Pair, Student,
                          LabGroup, Teacher)
 from django.utils import timezone
 import csv
+from django.contrib.auth.hashers import make_password
 
 maxNStudents = 23
 
@@ -287,7 +288,7 @@ class Command(BaseCommand):
                     Student.objects.get_or_create(
                         id=index+999,
                         username=row[0],
-                        password=row[1],
+                        password=make_password(row[1]),
                         last_name=row[2],
                         first_name=row[3],
                         theoryGroup=TheoryGroup.objects.get(
