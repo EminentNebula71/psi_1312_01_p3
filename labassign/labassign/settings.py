@@ -17,6 +17,10 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATABASE_URL = 'postgres://alumnodb:alumnodb@localhost:5432/psi'
 
+# Log In Log Out process
+AUTH_USER_MODEL = 'core.Student'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/

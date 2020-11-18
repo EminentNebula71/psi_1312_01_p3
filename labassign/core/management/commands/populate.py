@@ -285,14 +285,14 @@ class Command(BaseCommand):
 
             for index, row in enumerate(info):
                 if index > 0:
-                    Student.objects.get_or_create(
+                    Student.objects.create_user(
                         id=index+999,
                         username=row[0],
-                        password=make_password(row[1]),
+                        password=row[1],
                         last_name=row[2],
                         first_name=row[3],
                         theoryGroup=TheoryGroup.objects.get(
-                            groupName=row[4]))[0]
+                            groupName=row[4]))
 
     def studentgrade(self, cvsStudentFileGrades):
         # read csv file

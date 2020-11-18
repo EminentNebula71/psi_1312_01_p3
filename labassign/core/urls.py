@@ -5,5 +5,5 @@ app_name = 'core'
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('login/', views.user_login, name='login'),
+    path('convalidate/', views.convalidation_validate, name='convalidate'),
 ]

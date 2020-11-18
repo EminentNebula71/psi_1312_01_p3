@@ -1,15 +1,42 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <meta charset="UTF-8"/>
-        <title>
-            Core
-        </title>
-    </head>
-    <body>
-        <div>
-            Home
-        </div>
-        <a href="{% url 'core:login' %}">Login</a>
-    </body>
-</html>
+{% extends 'core/base.html' %}
+
+{%block title_block %}
+    Home
+{% endblock %}
+
+{% block body_block %}
+    <h1>Home</h1>
+    <div>
+        {% if user.is_authenticated %}
+            Nombre: {{ user.first_name }}
+            </br>
+            Apellidos: {{ user.last_name }}
+            </br>
+            Estado de convalidación: {{ user.convalidationGranted }}
+            </br></br>
+
+            Pareja:
+            </br>
+            {% for p in pairs %}
+                {% if user.id == p.student1.id %}
+                    - Estudiante 1: {{ p.student1.first_name }} {{ p.student1.last_name }}
+                    </br>
+                    - Estudiante 2: {{ p.student2.first_name }} {{ p.student2.last_name }}
+                    </br>
+                    - Validated: {{ p.validated }}
+                {% endif %}
+            {% endfor %}
+
+            {% if  %}
+                {% if user.convalidationGranted == False %}
+                    <form id="convalidate" method="post" action="{% url 'core:convalidate' %}">
+                        <input type="hidden" name="username" value={{ user.first_name }} /> <!-- esto puede fallar -->
+                        <input type="submit" value="Convalidar" />
+                    </form>
+                {% endif %}
+            {% endif %}
+
+            Grupo practicas: {{ user.labGroup }}
+        {% endif %}
+    </div>
+{% endblock %}

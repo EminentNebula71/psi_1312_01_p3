@@ -1,34 +1,17 @@
 from django.shortcuts import render, redirect
-from core.models import Pair, Student
+from core.models import Pair, Student, OtherConstraints
 from core.forms import PairForm, StudentForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect(reverse('core:home'))
-
-            else:
-                return HttpResponse("Your Rango account was disabled")
-
-        else:
-            print("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details")
-
-    else:
-        return render(request, 'core/login.html')
-
 def home(request):
-    return render(request, 'core/home.html')
+    pairs=Pair.objects.all()
+    user=request.GET.get('username')
+    context_dict = {}
+    context_dict['pairs'] = pairs
+    return render(request, 'core/home.html', context_dict)
 
 def create_petition(request):
     form = PairForm()
@@ -49,3 +32,20 @@ def create_petition(request):
             print(form.errors)
 
     return
+
+@login_required
+def convalidation_validate(request):
+    username = request.POST.get('username')
+
+    student1 = Student.objects.get(username=username)
+    st_theory = student1.gradeTheoryLastYear
+    st_lab = student1.gradeLabLastYear
+
+    # ESTO PUEDE PETAR
+    ot = OtherConstraints.objects.all().first()
+    min_theory = ot.minGradeTheoryConv
+    min_lab = ot.minGradeLabConv
+
+    if st_theory > min_theory and st_lab > min_lab:
+        student1.convalidationGranted = True
+    return redirect(reverse('core:home'))

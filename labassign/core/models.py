@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.db.models.functions import Upper
 
@@ -44,22 +44,12 @@ class TheoryGroup(models.Model):
         return self.groupName
 
 
-class Student(AbstractBaseUser):
+class Student(AbstractUser):
     labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE, null=True)
-    theoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE)
-    first_name = models.CharField(blank=False, max_length=50)
-    last_name = models.CharField(blank=False, max_length=50)
+    theoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE, null=True)
     gradeTheoryLastYear = models.FloatField(default=0.0)
     gradeLabLastYear = models.FloatField(default=0.0)
     convalidationGranted = models.BooleanField(default=False)
-    username = models.CharField(
-        blank=False,
-        max_length=50,
-        unique=True,
-        default='default')
-    password = models.CharField(blank=False, max_length=100)
-
-    USERNAME_FIELD = 'username'
 
     class Meta:
         ordering = [Upper('last_name'), 'first_name']
