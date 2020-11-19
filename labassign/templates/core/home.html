@@ -30,15 +30,16 @@
 
             
             {% if user.es_pareja == 0 %}
-                        {% if user.convalidationGranted == False %}
-                        <form id="convalidation" method="post" action="{% url 'core:convalidation' %}">
-                            {% csrf_token %}
-                            <input type="hidden" name="username" value={{ user.username }} /> <!-- esto puede fallar -->
-                            <input type="submit" value="convalidate" />
-                        </form>
-                        {% endif %}
-                    {% endif %}
-                    </br></br>
+                {% if user.convalidationGranted == False %}
+                    <form id="convalidation" method="POST" action="{% url 'core:convalidation' %}">
+                        {% csrf_token %}
+                        <input type="hidden" id="username" name="username" value={{user.username}} />
+                        <input type="submit" value="Convalidation" />
+                    </form>
+                {% endif %}
+                <a href="{% url 'core:applypair' %}"> <button type="button">Elige un compañero</button></a>
+            {% endif %}
+            </br></br>
             Grupo practicas: {{ user.labGroup }}
         {% endif %}
     </div>

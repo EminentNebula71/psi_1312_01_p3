@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+
+{%block title_block %}
+    Convalidation
+{% endblock %}
+
+{% block body_block %}
+    <h1>Convalidation</h1>
+    <div>
+        {% if user.convalidationGranted == True %}
+            You satisfy them.
+        {% else %}
+            do not satify
+        {% endif %}
+    </div>
+{% endblock %}

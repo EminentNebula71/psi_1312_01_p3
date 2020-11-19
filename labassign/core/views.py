@@ -34,19 +34,27 @@ def create_petition(request):
 
 @login_required
 def convalidation(request):
-    username = request.POST.get('username')
+    st_theory = request.user.gradeTheoryLastYear
+    st_lab = request.user.gradeLabLastYear
 
-    student1 = Student.objects.get(username=username)
-    st_theory = student1.gradeTheoryLastYear
-    st_lab = student1.gradeLabLastYear
-    print(st_lab)
-    # ESTO PUEDE PETAR
     ot = OtherConstraints.objects.all().first()
     min_theory = ot.minGradeTheoryConv
     min_lab = ot.minGradeLabConv
-    print(min_lab)
-    if st_theory > min_theory and st_lab > min_lab:
-        print("Cambia")
-        student1.convalidationGranted = True
-        student1.save()
+
+    if st_theory >= min_theory and st_lab >= min_lab:
+        request.user.convalidationGranted = True
+        request.user.save()
+
+    return render(request, 'core/convalidation.html')
+
+
+@login_required
+def applypair(request):
+    students = Student.objects.all().exclude(es_pareja=1)
+    students_final = students.exclude(username=request.user.username)
+    context_dict = {}
+    context_dict['students'] = students_final
+    return render(request, 'core/applypair.html', context_dict)
+
+def confirmar_pareja(request):
     return redirect(reverse('core:home'))

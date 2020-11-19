@@ -45,7 +45,7 @@ LOGIN_TITLE = "Login"
 LANDING_TITLE = r"Home"  # redirect here after login
 LANDING_PAGE = "home"
 
-CONVALIDATION_SERVICE = 'convalidation'
+CONVALIDATION_SERVICE = "core:convalidation"
 CONVALIDATION_TITLE = 'Convalidation'
 
 PAIR_SERVICE = "applypair"

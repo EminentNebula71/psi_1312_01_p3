@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{%block title_block %}
+    Apply pair
+{% endblock %}
+
+{% block body_block %}
+    <h1>Apply pair</h1>
+    <div>
+        <form id="eleccion" method="POST" action="{% url 'core:confirmar_pareja' %}">
+            {% csrf_token %}
+            <label for="cars">Elige un compañero:</label>
+
+            <select name="colegas" id="colegas">
+                {% for s in students %}
+                    <option value={{s.username}}>{{s.username}}</option>
+                {% endfor %}
+            </select> 
+
+            <input type="submit" value="elegir" />
+        </form>
+    </div>
+{% endblock %}
