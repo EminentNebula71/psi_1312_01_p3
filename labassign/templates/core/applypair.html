@@ -13,11 +13,11 @@
 
             <select name="colegas" id="colegas">
                 {% for s in students %}
-                    <option value={{s.username}}>{{s.username}}</option>
+                    <option id="seleccion" name="seleccion" value={{s.username}}>{{s.username}}</option>
                 {% endfor %}
             </select> 
 
-            <input type="submit" value="elegir" />
+            <input type="submit" value="Elegir" />
         </form>
     </div>
 {% endblock %}
