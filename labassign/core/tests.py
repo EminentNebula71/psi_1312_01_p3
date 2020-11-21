@@ -7,6 +7,5 @@ from core.tests_services import (ServiceBaseTest,
                                  LogInOutServiceTests,
                                  ConvalidationServiceTests,
                                  PairServiceTests,
-                                 BreakPairServiceTests,
                                  GroupServiceTests)
 

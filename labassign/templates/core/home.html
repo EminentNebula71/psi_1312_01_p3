@@ -17,7 +17,8 @@
             </br></br>
 
             {% for p in pairs %}
-                {% if user.id == p.student1.id %}
+                {% if user.es_pareja == 1 %}
+                {% if user.id == p.student1.id or user.id == p.student2.id%}
                     Pareja:
                     </br>
                     - Estudiante 1: {{ p.student1.first_name }} {{ p.student1.last_name }}
@@ -25,6 +26,7 @@
                     - Estudiante 2: {{ p.student2.first_name }} {{ p.student2.last_name }}
                     </br>
                     - Validated: {{ p.validated }}
+                {% endif %}
                 {% endif %}
             {% endfor %}
 
@@ -41,6 +43,10 @@
             {% endif %}
             </br></br>
             Grupo practicas: {{ user.labGroup }}
+            </br>
+            {% if user.esta_grupo == 0 %}
+                <a href="{% url 'core:elegir_grupo' %}"> <button type="button">Elige un grupo</button></a>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

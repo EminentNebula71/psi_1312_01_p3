@@ -262,16 +262,18 @@ class Command(BaseCommand):
             Pair.objects.create(
                 student1=Student.objects.get(id=key),
                 student2=Student.objects.get(id=value['student2']),
-                validated=value['validated'])
-            
+                validated=value['validated'])                
             student=Student.objects.get(id=key)
             student.es_pareja=1
+            if(value['validated']==True):
+                student.es_pareja_validada=1
             student.save()
             student=Student.objects.get(id=value['student2'])
             student.es_pareja=1
+            if(value['validated']==True):
+                student.es_pareja_validada=1
             student.save()
 
-            print(Student.objects.get(id=key).es_pareja)
 
     def otherconstrains(self):
         """create a single object here with staarting dates

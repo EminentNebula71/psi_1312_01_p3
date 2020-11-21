@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{%block title_block %}
+    Apply pair
+{% endblock %}
+
+{% block body_block %}
+    <h1>Apply Group</h1>
+    <p>Select the second</p>
+    <div>
+        {% if valido == 1 %}
+        <form id="grupo_form" name="grupo_form" method="POST" action="{% url 'core:confirmar_grupo' %}">
+            {% csrf_token %}
+            <label for="label">Elige un grupo:</label>
+
+            <select name="grupos" id="grupos">
+                {% for g in grupos_lab %}
+                    <option id="grupo" name="grupo" value={{g.id}}>>{{g.id}}</option>
+                {% endfor %}
+            </select> 
+            <input type="submit" value="Elegir" />
+        </form>
+        {% else %}
+            <p>Group selection is not active</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -5,15 +5,16 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Apply pair</h1>
+    <h1>Apply Pair</h1>
+    <p>Select the second</p>
     <div>
-        <form id="eleccion" method="POST" action="{% url 'core:confirmar_pareja' %}">
+        <form id="eleccion" name="eleccion" method="POST" action="{% url 'core:confirmar_pareja' %}">
             {% csrf_token %}
-            <label for="cars">Elige un compañero:</label>
+            <label for="companero">Elige un compañero:</label>
 
             <select name="colegas" id="colegas">
                 {% for s in students %}
-                    <option id="seleccion" name="seleccion" value={{s.username}}>{{s.username}}</option>
+                    <option id="seleccion" name="seleccion" value={{s.id}}>>{{s.last_name}}, {{s.first_name}}</option>
                 {% endfor %}
             </select> 
 
