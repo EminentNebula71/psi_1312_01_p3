@@ -51,7 +51,7 @@ CONVALIDATION_TITLE = 'Convalidation'
 PAIR_SERVICE = "core:applypair"
 PAIR_TITLE = 'Apply Pair'
 PAIR_SAME_USER = 'User has already selected a pair'
-PAIR_FORM_LABEL = 'eleccion'
+PAIR_FORM_LABEL = 'colegas'
 PAIR_SELECTION_ERROR='Could not process your request'
 BREAK_SERVICE = "breakpair"
 BREAK_TITLE = 'Break Pair'
@@ -59,7 +59,7 @@ BREAK_FORM_LABEL = 'myPair'
 
 GROUP_SERVICE = "core:elegir_grupo"
 GROUP_TITLE = 'Apply Group'
-GROUP_FORM_LABEL = 'myLabGroup'
+GROUP_FORM_LABEL = 'grupos'
 GROUP_ERROR_NOT_VALID = 'Members of the theory group'
 
 SERVICE_DEF = {LOGIN_SERVICE: {

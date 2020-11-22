@@ -53,6 +53,39 @@ def convalidation(request):
 
 @login_required
 def applypair(request):
+    if request.method == 'POST':
+        if request.user.es_pareja==1:
+            students = Student.objects.all().exclude(es_pareja_validada=1)
+            students_final = students.exclude(username=request.user.username)
+            pareja_mismo_usuario="User has already selected a pair"
+            context_dict = {}
+            context_dict['students'] = students_final
+            context_dict['pareja_mismo_usuario']=pareja_mismo_usuario
+            return render(request, 'core/applypair.html', context_dict)
+
+        user1=request.user
+        user2_id=request.POST.get("colegas")
+        user2=Student.objects.get(id=user2_id)
+        try:
+            pareja=Pair.objects.get(student1=user2, student2=user1)
+            pareja.validated=True
+            pareja.save()
+            user1.es_pareja=1
+            user1.es_pareja_validada=1
+            user1.save()
+            user2.es_pareja_validada=1
+            user2.save()
+
+        except ObjectDoesNotExist:
+            Pair.objects.create(student1=user1, student2=user2)
+            user1.es_pareja=1
+            user1.save()
+            
+        return redirect(reverse('core:home'))
+
+    if request.user.es_pareja==1:
+        return redirect(reverse('core:home'))
+ 
     students = Student.objects.all().exclude(es_pareja_validada=1)
     students_final = students.exclude(username=request.user.username)
     context_dict = {}
@@ -60,30 +93,37 @@ def applypair(request):
     return render(request, 'core/applypair.html', context_dict)
 
 
-def confirmar_pareja(request):
-    user1=request.user
-    user2_id=request.POST.get("colegas")
-    user2=Student.objects.get(id=user2_id)
-    try:
-        pareja=Pair.objects.get(student1=user2, student2=user1)
-        pareja.validated=True
-        pareja.save()
-        user1.es_pareja=1
-        user1.es_pareja_validada=1
-        user1.save()
-        user2.es_pareja_validada=1
-        user2.save()
-
-    except ObjectDoesNotExist:
-        Pair.objects.create(student1=user1, student2=user2)
-        user1.es_pareja=1
-        user1.save()
-        
-    return redirect(reverse('core:home'))
-
-
 @login_required
 def elegir_grupo(request):
+    if request.method=='POST':
+        user1=request.user
+        grupo_id=request.POST.get("grupos")
+        grupo=LabGroup.objects.get(id=grupo_id)
+        if(user1.es_pareja_validada==1):
+            try:
+                pair = Pair.objects.get(student1=user1, validated=True)
+            except ObjectDoesNotExist:
+                pair = Pair.objects.get(student2=user1, validated=True)
+            finally:
+                user2 = pair.student2
+                if((grupo.maxNumberStudents-grupo.counter)>=2):
+                    user1.labGroup=grupo
+            user1.esta_grupo=1
+            user1.save()
+            user2.esta_grupo=1
+            user2.save()
+            grupo.counter+=2
+            grupo.save()
+
+        elif(grupo.maxNumberStudents > grupo.counter):
+            user1.labGroup=grupo
+            user1.esta_grupo=1
+            user1.save()
+            grupo.counter+=1
+            grupo.save()
+        
+        return redirect(reverse('core:home'))    
+
     grupo_student = request.user.theoryGroup
     grupos_lab = GroupConstraints.objects.filter(theoryGroup=grupo_student)
     print(grupos_lab)
@@ -94,38 +134,8 @@ def elegir_grupo(request):
         valido=0
     else:
         valido=1
-
     context_dict = {}
     context_dict['grupos_lab'] = grupos_lab
     context_dict['valido'] = valido
     return render(request, 'core/elegir_grupo.html', context_dict)
 
-
-def confirmar_grupo(request):
-    user1=request.user
-    grupo_id=request.POST.get("grupos")
-    grupo=LabGroup.objects.get(id=grupo_id)
-    if(user1.es_pareja_validada==1):
-        try:
-            pair = Pair.objects.get(student1=user1, validated=True)
-        except ObjectDoesNotExist:
-            pair = Pair.objects.get(student2=user1, validated=True)
-        finally:
-            user2 = pair.student2
-            if((grupo.maxNumberStudents-grupo.counter)>=2):
-                user1.labGroup=grupo
-        user1.esta_grupo=1
-        user1.save()
-        user2.esta_grupo=1
-        user2.save()
-        grupo.counter+=2
-        grupo.save()
-
-    elif(grupo.maxNumberStudents > grupo.counter):
-        user1.labGroup=grupo
-        user1.esta_grupo=1
-        user1.save()
-        grupo.counter+=1
-        grupo.save()
-    
-    return redirect(reverse('core:home'))

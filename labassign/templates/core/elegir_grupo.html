@@ -9,7 +9,7 @@
     <p>Select the second</p>
     <div>
         {% if valido == 1 %}
-        <form id="grupo_form" name="grupo_form" method="POST" action="{% url 'core:confirmar_grupo' %}">
+        <form id="grupo_form" name="grupo_form" method="POST" action="{% url 'core:elegir_grupo' %}">
             {% csrf_token %}
             <label for="label">Elige un grupo:</label>
 

@@ -6,9 +6,13 @@
 
 {% block body_block %}
     <h1>Apply Pair</h1>
+    {% if pareja_mismo_usuario %}
+        {{pareja_mismo_usuario}}
+
+    {% else %}
     <p>Select the second</p>
     <div>
-        <form id="eleccion" name="eleccion" method="POST" action="{% url 'core:confirmar_pareja' %}">
+        <form id="eleccion" name="eleccion" method="POST" action="{% url 'core:applypair' %}">
             {% csrf_token %}
             <label for="companero">Elige un compañero:</label>
 
@@ -21,4 +25,5 @@
             <input type="submit" value="Elegir" />
         </form>
     </div>
+    {%endif%}
 {% endblock %}
