@@ -15,7 +15,6 @@ from core.models import (OtherConstraints, Pair, Student,
                          LabGroup, Teacher)
 from django.utils import timezone
 import csv
-from django.contrib.auth.hashers import make_password
 
 maxNStudents = 23
 
@@ -262,18 +261,17 @@ class Command(BaseCommand):
             Pair.objects.create(
                 student1=Student.objects.get(id=key),
                 student2=Student.objects.get(id=value['student2']),
-                validated=value['validated'])                
-            student=Student.objects.get(id=key)
-            student.es_pareja=1
-            if(value['validated']==True):
-                student.es_pareja_validada=1
+                validated=value['validated'])
+            student = Student.objects.get(id=key)
+            student.es_pareja = 1
+            if(value['validated'] is True):
+                student.es_pareja_validada = 1
             student.save()
-            student=Student.objects.get(id=value['student2'])
-            student.es_pareja=1
-            if(value['validated']==True):
-                student.es_pareja_validada=1
+            student = Student.objects.get(id=value['student2'])
+            student.es_pareja = 1
+            if(value['validated'] is True):
+                student.es_pareja_validada = 1
             student.save()
-
 
     def otherconstrains(self):
         """create a single object here with staarting dates
@@ -285,7 +283,7 @@ class Command(BaseCommand):
         """
         o = OtherConstraints.objects.get_or_create(
             minGradeTheoryConv=3, minGradeLabConv=7)[0]
-        o.selectGroupStartDate = timezone.now() + timezone.timedelta(days=1)
+        o.selectGroupStartDate = timezone.now() - timezone.timedelta(days=1)
         o.save()
 
     def student(self, csvStudentFile):

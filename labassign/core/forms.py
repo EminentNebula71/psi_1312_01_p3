@@ -3,7 +3,8 @@ from core.models import Pair, Student
 
 MAX_LENGTH = 128
 
-class PairForm(forms.ModelForm):  
+
+class PairForm(forms.ModelForm):
     class Meta:
         model = Pair
         exclude = ('studentBreakRequest', 'validated')
@@ -31,4 +32,3 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('username', 'password')
-       

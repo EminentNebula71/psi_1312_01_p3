@@ -46,14 +46,20 @@ class TheoryGroup(models.Model):
 
 class Student(AbstractUser):
     labGroup = models.ForeignKey(LabGroup, on_delete=models.CASCADE, null=True)
-    theoryGroup = models.ForeignKey(TheoryGroup, on_delete=models.CASCADE, null=True)
+    theoryGroup = models.ForeignKey(
+        TheoryGroup,
+        on_delete=models.CASCADE,
+        null=True)
     gradeTheoryLastYear = models.FloatField(default=0.0)
     gradeLabLastYear = models.FloatField(default=0.0)
     convalidationGranted = models.BooleanField(default=False)
+    # Flag para comprobar que el estudiante ha seleccionado una pareja
     es_pareja = models.IntegerField(default=0)
+    # Flag para comprobar que el estudiante está en una pareja validada
     es_pareja_validada = models.IntegerField(default=0)
+    # Flag para comprobar que el estudiante está en un grupo de laboratorio
     esta_grupo = models.IntegerField(default=0)
-    
+
     class Meta:
         ordering = [Upper('last_name'), 'first_name']
 
@@ -123,4 +129,3 @@ class Pair(models.Model):
 
     class Meta:
         ordering = ['student1__id', 'student2__id']
-

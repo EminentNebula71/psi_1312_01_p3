@@ -31,7 +31,7 @@ SECRET_KEY = '*0s+n29rcr=zkorv0aa+6q42!a$%*1jtnpfn83hel@ni_(sxbk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'floating-ocean-81816.herokuapp.com', u'localhost', u'127.0.0.1']
+ALLOWED_HOSTS = [u'sleepy-bastion-07329.herokuapp.com', u'localhost', u'127.0.0.1']
 
 
 # Application definition
