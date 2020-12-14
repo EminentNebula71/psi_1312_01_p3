@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{%block title_block %}
+    Break pair
+{% endblock %}
+
+{% block body_block %}
+    <h1>Break Pair</h1>
+    
+    <p>Select the pair to be</p>
+    <div>
+        <form id="break" name="break" method="POST" action="{% url 'core:breakpair' %}">
+            {% csrf_token %}
+            <label for="companero">Elige la pareja que quiere romper:</label>
+
+            <select name="parejas" id="parejas">
+                {% for p in parejas_user %}
+                    <option id="seleccion" name="seleccion" value={{p.id}}>>{{p.student1}}, {{p.student2}}</option>
+                {% endfor %}
+            </select> 
+
+            <input type="submit" value="Elegir" />
+        </form>
+        {{ error_breakpair }}
+    </div>
+{% endblock %}

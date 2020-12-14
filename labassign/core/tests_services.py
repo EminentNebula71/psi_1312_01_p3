@@ -53,13 +53,13 @@ PAIR_TITLE = 'Apply Pair'
 PAIR_SAME_USER = 'User has already selected a pair'
 PAIR_FORM_LABEL = 'colegas'
 PAIR_SELECTION_ERROR='Could not process your request'
-BREAK_SERVICE = "breakpair"
+BREAK_SERVICE = "core:breakpair"
 BREAK_TITLE = 'Break Pair'
-BREAK_FORM_LABEL = 'myPair'
+BREAK_FORM_LABEL = 'parejas'
 
 GROUP_SERVICE = "core:elegir_grupo"
 GROUP_TITLE = 'Apply Group'
-GROUP_FORM_LABEL = 'grupos'
+GROUP_FORM_LABEL = 'grupo'
 GROUP_ERROR_NOT_VALID = 'Members of the theory group'
 
 SERVICE_DEF = {LOGIN_SERVICE: {
@@ -144,12 +144,13 @@ class ServiceBaseTest(TestCase):
             password=self.paramsUser4["password"],
             first_name=self.paramsUser4["first_name"],
             last_name=self.paramsUser4["last_name"])
-
+        print("Empieza tests", flush=True)
         self.client1 = self.client
         self.client2 = Client()
         self.client3 = Client()
         self.populate = Command()
         self.populate.teacher()
+        print("Empieza populates", flush=True)
         self.populate.otherconstrains()
         self.populate.theorygroup()
         self.populate.labgroup()
@@ -516,170 +517,170 @@ class PairServiceTests(ServiceBaseTest):
         self.assertFalse(m)
 
 
-# class BreakPairServiceTests(ServiceBaseTest):
-#     "test related with breaking pairs"
-#     def test30_breakpair_no_login(self):
-#         "try to breakpair without login first"
-#         # logout"
-#         self.client1.get(reverse(LOGOUT_SERVICE), follow=True)
-#         response = self.client1.get(reverse(BREAK_SERVICE), follow=True)
-#         self.is_login(response)
+class BreakPairServiceTests(ServiceBaseTest):
+    "test related with breaking pairs"
+    def test30_breakpair_no_login(self):
+        "try to breakpair without login first"
+        # logout"
+        self.client1.get(reverse(LOGOUT_SERVICE), follow=True)
+        response = self.client1.get(reverse(BREAK_SERVICE), follow=True)
+        self.is_login(response)
 
-#     def test31_novalidated_breakpair(self):
-#         """test break pair simple case:
-#         a) login
-#         b) created NOT validated pair
-#         c) break pair
-#         """
-#         # create simple pair
-#         # with validated = False
-#         p = Pair(student1=self.user1, student2=self.user2)
-#         p.save()
-#         pid = p.id
-#         # login 1 user
-#         self.loginTestUser(self.client1, self.user1)
-#         # ask for break page
-#         response = self.client1.get(reverse(BREAK_SERVICE), follow=True)
-#         # check landing page is OK
-#         self.is_break_pair(response)
-#         # check list of users is OK
-#         m = re.search(self.user1.first_name, self.decode(response.content))
-#         self.assertTrue(m)
-#         m = re.search(self.user2.first_name, self.decode(response.content))
-#         self.assertTrue(m)
-#         m = re.search(self.user3.first_name, self.decode(response.content))
-#         self.assertFalse(m)
-#         m = re.search(self.user4.first_name, self.decode(response.content))
-#         self.assertFalse(m)
-#         # POST call to BREAK_SERVICE
-#         data = {BREAK_FORM_LABEL: pid}
-#         response = self.client1.post(reverse(BREAK_SERVICE),
-#                                      data=data,
-#                                      follow=True)
-#         self.assertFalse(Pair.objects.filter(pk=pid).exists())
+    def test31_novalidated_breakpair(self):
+        """test break pair simple case:
+        a) login
+        b) created NOT validated pair
+        c) break pair
+        """
+        # create simple pair
+        # with validated = False
+        p = Pair(student1=self.user1, student2=self.user2)
+        p.save()
+        pid = p.id
+        # login 1 user
+        self.loginTestUser(self.client1, self.user1)
+        # ask for break page
+        response = self.client1.get(reverse(BREAK_SERVICE), follow=True)
+        # check landing page is OK
+        self.is_break_pair(response)
+        # check list of users is OK
+        m = re.search(self.user1.first_name, self.decode(response.content))
+        self.assertTrue(m)
+        m = re.search(self.user2.first_name, self.decode(response.content))
+        self.assertTrue(m)
+        m = re.search(self.user3.first_name, self.decode(response.content))
+        self.assertFalse(m)
+        m = re.search(self.user4.first_name, self.decode(response.content))
+        self.assertFalse(m)
+        # POST call to BREAK_SERVICE
+        data = {BREAK_FORM_LABEL: pid}
+        response = self.client1.post(reverse(BREAK_SERVICE),
+                                     data=data,
+                                     follow=True)
+        self.assertFalse(Pair.objects.filter(pk=pid).exists())
 
-#     def test32_validated_breakpair_first_user(self):
-#         """test break pair simple case:
-#         a) login
-#         b) created NOT validated pàir
-#         c) break pair
-#         """
-#         # create simple pair
-#         # with validated = False
-#         p = Pair(student1=self.user1, student2=self.user2, validated=True)
-#         p.save()
-#         pid = p.id
-#         # login 2 users
-#         self.loginTestUser(self.client1, self.user1)
-#         self.loginTestUser(self.client2, self.user2)
-#         self.assertIsNone(Pair.objects.get(pk=pid).studentBreakRequest)
-#         # POST call to BREAK_SERVICE
-#         # user1
-#         data = {BREAK_FORM_LABEL: pid}
-#         self.client1.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         self.assertTrue(Pair.objects.filter(pk=pid).exists())
-#         # check studentBreak is active
-#         self.assertTrue(Pair.objects.get(pk=pid).studentBreakRequest ==
-#                         self.user1)
-#         # user2
-#         self.client2.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         # check pair has been deleted
-#         self.assertFalse(Pair.objects.filter(pk=pid).exists())
+    def test32_validated_breakpair_first_user(self):
+        """test break pair simple case:
+        a) login
+        b) created NOT validated pàir
+        c) break pair
+        """
+        # create simple pair
+        # with validated = False
+        p = Pair(student1=self.user1, student2=self.user2, validated=True)
+        p.save()
+        pid = p.id
+        # login 2 users
+        self.loginTestUser(self.client1, self.user1)
+        self.loginTestUser(self.client2, self.user2)
+        self.assertIsNone(Pair.objects.get(pk=pid).studentBreakRequest)
+        # POST call to BREAK_SERVICE
+        # user1
+        data = {BREAK_FORM_LABEL: pid}
+        self.client1.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        self.assertTrue(Pair.objects.filter(pk=pid).exists())
+        # check studentBreak is active
+        self.assertTrue(Pair.objects.get(pk=pid).studentBreakRequest ==
+                        self.user1)
+        # user2
+        self.client2.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        # check pair has been deleted
+        self.assertFalse(Pair.objects.filter(pk=pid).exists())
 
-#     def test33_validated_breakpair_second_user(self):
-#         """As previous cse but user 2 beaks the pair
-#         """
-#         # create simple pair
-#         # with validated = True
-#         p = Pair(student1=self.user1, student2=self.user2, validated=True)
-#         p.save()
-#         pid = p.id
-#         # login 2 users
-#         self.loginTestUser(self.client1, self.user1)
-#         self.loginTestUser(self.client2, self.user2)
-#         self.assertIsNone(Pair.objects.get(pk=pid).studentBreakRequest)
-#         # POST call to BREAK_SERVICE
-#         # user2
-#         data = {BREAK_FORM_LABEL: pid}
-#         self.client2.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         self.assertTrue(Pair.objects.filter(pk=pid).exists())
-#         # check studentBreak is active
-#         self.assertTrue(Pair.objects.get(pk=pid).studentBreakRequest ==
-#                         self.user2)
-#         # user1
-#         self.client1.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         # check pair has been deleted
-#         self.assertFalse(Pair.objects.filter(pk=pid).exists())
+    def test33_validated_breakpair_second_user(self):
+        """As previous cse but user 2 beaks the pair
+        """
+        # create simple pair
+        # with validated = True
+        p = Pair(student1=self.user1, student2=self.user2, validated=True)
+        p.save()
+        pid = p.id
+        # login 2 users
+        self.loginTestUser(self.client1, self.user1)
+        self.loginTestUser(self.client2, self.user2)
+        self.assertIsNone(Pair.objects.get(pk=pid).studentBreakRequest)
+        # POST call to BREAK_SERVICE
+        # user2
+        data = {BREAK_FORM_LABEL: pid}
+        self.client2.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        self.assertTrue(Pair.objects.filter(pk=pid).exists())
+        # check studentBreak is active
+        self.assertTrue(Pair.objects.get(pk=pid).studentBreakRequest ==
+                        self.user2)
+        # user1
+        self.client1.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        # check pair has been deleted
+        self.assertFalse(Pair.objects.filter(pk=pid).exists())
 
-#     def test34_validated_breakpair_user_twice_requested(self):
-#         """user 1 and user 2 has requested user 3 as pair
-#         user 3 has accepted user 2 request
-#         break all pairs
-#         """
-#         # first pair with  validated = False
-#         p = Pair(student1=self.user1, student2=self.user3, validated=False)
-#         p.save()
-#         p1id = p.id
-#         # second pair with  validated = True
-#         p = Pair(student1=self.user2, student2=self.user3, validated=True)
-#         p.save()
-#         p2id = p.id
+    def test34_validated_breakpair_user_twice_requested(self):
+        """user 1 and user 2 has requested user 3 as pair
+        user 3 has accepted user 2 request
+        break all pairs
+        """
+        # first pair with  validated = False
+        p = Pair(student1=self.user1, student2=self.user3, validated=False)
+        p.save()
+        p1id = p.id
+        # second pair with  validated = True
+        p = Pair(student1=self.user2, student2=self.user3, validated=True)
+        p.save()
+        p2id = p.id
 
-#         # login 3 users
-#         self.loginTestUser(self.client1, self.user1)
-#         self.loginTestUser(self.client2, self.user2)
-#         self.loginTestUser(self.client3, self.user3)
+        # login 3 users
+        self.loginTestUser(self.client1, self.user1)
+        self.loginTestUser(self.client2, self.user2)
+        self.loginTestUser(self.client3, self.user3)
 
-#         # assert pairs
-#         self.assertIsNone(Pair.objects.get(pk=p1id).studentBreakRequest)
-#         self.assertIsNone(Pair.objects.get(pk=p2id).studentBreakRequest)
-#         # POST call to BREAK_SERVICE
-#         # user2 tries to break second pair
-#         data = {BREAK_FORM_LABEL: p2id}
-#         self.client2.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         # but will not be broken until user3 breaks it too
-#         self.assertTrue(Pair.objects.filter(pk=p2id).exists())
-#         # check studentBreak is active
-#         self.assertTrue(Pair.objects.get(pk=p2id).studentBreakRequest ==
-#                         self.user2)
-#         # user 1 break pair, since it is not validated is OK
-#         data = {BREAK_FORM_LABEL: p1id}
-#         self.client1.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         # check pair has been deleted
-#         self.assertFalse(Pair.objects.filter(pk=p1id).exists())
+        # assert pairs
+        self.assertIsNone(Pair.objects.get(pk=p1id).studentBreakRequest)
+        self.assertIsNone(Pair.objects.get(pk=p2id).studentBreakRequest)
+        # POST call to BREAK_SERVICE
+        # user2 tries to break second pair
+        data = {BREAK_FORM_LABEL: p2id}
+        self.client2.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        # but will not be broken until user3 breaks it too
+        self.assertTrue(Pair.objects.filter(pk=p2id).exists())
+        # check studentBreak is active
+        self.assertTrue(Pair.objects.get(pk=p2id).studentBreakRequest ==
+                        self.user2)
+        # user 1 break pair, since it is not validated is OK
+        data = {BREAK_FORM_LABEL: p1id}
+        self.client1.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        # check pair has been deleted
+        self.assertFalse(Pair.objects.filter(pk=p1id).exists())
 
-#         # finally user 3 breaks second pair
-#         data = {BREAK_FORM_LABEL: p2id}
-#         self.client3.post(reverse(BREAK_SERVICE),
-#                           data=data,
-#                           follow=True)
-#         # check pair has been deleted
-#         self.assertFalse(Pair.objects.filter(pk=p2id).exists())
+        # finally user 3 breaks second pair
+        data = {BREAK_FORM_LABEL: p2id}
+        self.client3.post(reverse(BREAK_SERVICE),
+                          data=data,
+                          follow=True)
+        # check pair has been deleted
+        self.assertFalse(Pair.objects.filter(pk=p2id).exists())
 
-#     def test35_break_nonexisting_pair(self):
-#         """test pair that does not exists
-#         """
-#         # login
-#         self.loginTestUser(self.client1, self.user1)
-#         # send wrong pait id
-#         data = {BREAK_FORM_LABEL: 123456}
-#         response = self.client1.post(reverse(BREAK_SERVICE),
-#                                      data=data,
-#                                      follow=True)
-#         self.assertFalse(
-#             self.decode(response.content).find(PAIR_SELECTION_ERROR)==-1)
+    def test35_break_nonexisting_pair(self):
+        """test pair that does not exists
+        """
+        # login
+        self.loginTestUser(self.client1, self.user1)
+        # send wrong pait id
+        data = {BREAK_FORM_LABEL: 123456}
+        response = self.client1.post(reverse(BREAK_SERVICE),
+                                     data=data,
+                                     follow=True)
+        self.assertFalse(
+            self.decode(response.content).find(PAIR_SELECTION_ERROR)==-1)
 
 
 class GroupServiceTests(ServiceBaseTest):
@@ -775,6 +776,7 @@ class GroupServiceTests(ServiceBaseTest):
 
     def test_43_select_group_pair_user2_request(self):
         """Select group for pairs"""
+        print("Prueba", flush=True)
         # login
         self.loginTestUser(self.client2, self.user2)
         # set all theory groups
@@ -791,6 +793,7 @@ class GroupServiceTests(ServiceBaseTest):
         # for each theory group
         p = Pair(student1=self.user1, student2=self.user2, validated=True)
         p.save()
+        print("Pareja", p, flush=True)
         for theoryGroup in tgQS:
             print(theoryGroup.groupName)
             # user2 group is irrelevant
@@ -833,10 +836,13 @@ class GroupServiceTests(ServiceBaseTest):
                     theoryGroup=theoryGroup,
                     labGroup=labGroup).exists()
                 if valid:
+                    print("Estudiante: ", Student.objects.get(
+                        pk=self.user1.id,
+                        labGroup=labGroup), flush=True)
                     self.assertTrue(Student.objects.filter(
                         pk=self.user1.id,
                         labGroup=labGroup).exists(),
-                                    "user2 has not labGroup assigned")
+                                    "user1 has not labGroup assigned")
                     self.assertTrue(Student.objects.filter(
                         pk=self.user2.id,
                         labGroup=labGroup).exists(),

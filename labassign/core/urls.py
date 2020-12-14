@@ -8,4 +8,5 @@ urlpatterns = [
     path('convalidation/', views.convalidation, name='convalidation'),
     path('applypair/', views.applypair, name='applypair'),
     path('elegir_grupo/', views.elegir_grupo, name='elegir_grupo'),
+    path('breakpair/', views.breakpair, name='breakpair'),    
 ]
