@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-
+{% load static %}
 <html>
     <head lang="en">
+        <link rel="stylesheet" href="{% static "css/base.css" %}"/>
         <meta charset="UTF-8"/>
         <title>
             Core -
@@ -15,15 +16,15 @@
             {% block body_block %}
             {% endblock %}
         </div>
-        <hr/>
-        <div>
+        <br/>
+        <div id="lista">
             <ul>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a class="lista" href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a class="lista" href="{% url 'login' %}">Login</a></li>
                 {% endif %}
-                    <li><a href="{% url 'core:home' %}">Index</a></li>
+                    <li><a class="lista" href="{% url 'core:home' %}">Index</a></li>
             </ul>
         </div>
     </body>

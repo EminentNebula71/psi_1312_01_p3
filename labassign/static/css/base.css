@@ -1,0 +1,32 @@
+#lista {
+    position: relative;
+    bottom: 0px;
+    border-style: outset;
+    border-color: cornflowerblue;
+    border-radius: 10px;
+    opacity: 0.7;
+}
+
+a.lista:link, a.lista:visited {
+    background-image:linear-gradient(to right, darkmagenta, cyan);
+    color:midnightblue;
+    padding: 14px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+a.lista:hover {
+    background-image: linear-gradient(to right, cyan, darkmagenta);
+    color: darkmagenta;
+    transition-duration: 0.4s;
+}
+
+h1 {
+    background-image:linear-gradient(to right, darkmagenta, rgb(0, 110, 255));
+    border-radius: 5px;
+    text-align: center;
+    color: white;
+}
+
