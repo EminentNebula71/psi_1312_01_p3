@@ -144,13 +144,12 @@ class ServiceBaseTest(TestCase):
             password=self.paramsUser4["password"],
             first_name=self.paramsUser4["first_name"],
             last_name=self.paramsUser4["last_name"])
-        print("Empieza tests", flush=True)
+
         self.client1 = self.client
         self.client2 = Client()
         self.client3 = Client()
         self.populate = Command()
         self.populate.teacher()
-        print("Empieza populates", flush=True)
         self.populate.otherconstrains()
         self.populate.theorygroup()
         self.populate.labgroup()
@@ -776,7 +775,6 @@ class GroupServiceTests(ServiceBaseTest):
 
     def test_43_select_group_pair_user2_request(self):
         """Select group for pairs"""
-        print("Prueba", flush=True)
         # login
         self.loginTestUser(self.client2, self.user2)
         # set all theory groups
@@ -793,7 +791,6 @@ class GroupServiceTests(ServiceBaseTest):
         # for each theory group
         p = Pair(student1=self.user1, student2=self.user2, validated=True)
         p.save()
-        print("Pareja", p, flush=True)
         for theoryGroup in tgQS:
             print(theoryGroup.groupName)
             # user2 group is irrelevant
@@ -836,13 +833,10 @@ class GroupServiceTests(ServiceBaseTest):
                     theoryGroup=theoryGroup,
                     labGroup=labGroup).exists()
                 if valid:
-                    print("Estudiante: ", Student.objects.get(
-                        pk=self.user1.id,
-                        labGroup=labGroup), flush=True)
                     self.assertTrue(Student.objects.filter(
                         pk=self.user1.id,
                         labGroup=labGroup).exists(),
-                                    "user1 has not labGroup assigned")
+                                    "user2 has not labGroup assigned")
                     self.assertTrue(Student.objects.filter(
                         pk=self.user2.id,
                         labGroup=labGroup).exists(),

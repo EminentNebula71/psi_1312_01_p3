@@ -121,7 +121,7 @@ def elegir_grupo(request):
     """
     if request.method == 'POST':
         user1 = request.user
-        grupo_id = request.POST.get("grupos")
+        grupo_id = request.POST.get("grupo")
         grupo = LabGroup.objects.get(id=grupo_id)
         if GroupConstraints.objects.filter(labGroup=grupo, theoryGroup=user1.theoryGroup).exists() == False:
             grupo_student = request.user.theoryGroup
@@ -143,7 +143,6 @@ def elegir_grupo(request):
         if(Pair.objects.filter(student1=user1, validated=True).exists() == True):
             user2 = Pair.objects.get(student1=user1, validated=True).student2
             if((grupo.maxNumberStudents-grupo.counter) >= 2):
-                print("Está dentro", grupo.maxNumberStudents, grupo.counter)
                 user1.labGroup = grupo
                 user2.labGroup = grupo
                 user1.esta_grupo = 1
@@ -154,9 +153,8 @@ def elegir_grupo(request):
                 grupo.save()
 
         elif(Pair.objects.filter(student2=user1, validated=True).exists() == True):
-            user2 = Pair.objects.get(student1=user1, validated=True).student1
+            user2 = Pair.objects.get(student2=user1, validated=True).student1
             if((grupo.maxNumberStudents-grupo.counter) >= 2):
-                print("Está dentro 2", grupo.maxNumberStudents, grupo.counter)
                 user1.labGroup = grupo
                 user2.labGroup = grupo
                 user1.esta_grupo = 1
@@ -224,7 +222,6 @@ def breakpair(request):
     parejas_user1 = Pair.objects.filter(student1=request.user)
     parejas_user2= Pair.objects.filter(student2=request.user)
     parejas_user1 |= parejas_user2
-    print(parejas_user1)
     context_dict = {}
     context_dict['parejas_user'] = parejas_user1
     return render(request, 'core/breakpair.html', context_dict)
