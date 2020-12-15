@@ -6,49 +6,51 @@
 
 {% block body_block %}
     <h1>Home</h1>
-    <div>
+    <div class="contenido">
+        <div class="informacion">
         {% if user.is_authenticated %}
-            Summary page for <b>{{ user.first_name }}</b></br>
-            Nombre: {{ user.first_name }}
+            <p id="summary">Summary page for <b>{{ user.first_name }}</b></br></p>
+            Nombre: <div id="nombre">{{ user.first_name }}</div>
             </br>
-            Apellidos: {{ user.last_name }}
+            Apellidos: <div id="apellidos">{{ user.last_name }}</div>
             </br>
-            Estado de convalidación: {{ user.convalidationGranted }}
-            </br></br>
-
+            Estado de convalidación: <div id="grupo">{{ user.convalidationGranted }}</div>
+            </br>
+            Grupo practicas: <div id="grupo">{{ user.labGroup }}</div>
+            </br>
             {% for p in pairs %}
                 {% if user.id == p.student1.id or user.id == p.student2.id%}
                     Pareja:
                     </br>
-                    - Estudiante 1: {{ p.student1.first_name }} {{ p.student1.last_name }}
+                    - Estudiante 1: <div id="nombre">{{ p.student1.first_name }} {{ p.student1.last_name }}</div>
                     </br>
-                    - Estudiante 2: {{ p.student2.first_name }} {{ p.student2.last_name }}
+                    - Estudiante 2: <div id="apellidos">{{ p.student2.first_name }} {{ p.student2.last_name }}</div>
                     </br>
-                    - Validated: {{ p.validated }}
+                    - Validated: <div id="grupo">{{ p.validated }}</div>
                 </br>
             </br>
                 {% endif %}
             {% endfor %}
-
-            
+        </div>  
+        
             {% if user.es_pareja == 0 %}
                 {% if user.convalidationGranted == False %}
-                    <form id="convalidation" method="POST" action="{% url 'core:convalidation' %}">
+                    <form  id="convalidation" method="POST" action="{% url 'core:convalidation' %}">
                         {% csrf_token %}
                         <input type="hidden" id="username" name="username" value={{user.username}} />
-                        <input type="submit" value="Convalidation" />
+                        <input type="submit" class="boton" value="Convalidation" />
                     </form>
                 {% endif %}
-                <a href="{% url 'core:applypair' %}"> <button type="button">Elige un compañero</button></a>
+                <br>
+                <a href="{% url 'core:applypair' %}"> <button class="boton" type="button">Elige un compañero</button></a>
                 {{ convalidado }}
             {% endif %}
             </br></br>
-            Grupo practicas: {{ user.labGroup }}
-            </br>
+            
             {% if user.esta_grupo == 0 %}
-                <a href="{% url 'core:elegir_grupo' %}"> <button type="button">Elige un grupo</button></a>
+                <a href="{% url 'core:elegir_grupo' %}"> <button class="boton" type="button">Elige un grupo</button></a>
                 {% if user.es_pareja == 1 %}
-                        <a href="{% url 'core:breakpair' %}"> <button type="button">Romper pareja</button></a>
+                        <a href="{% url 'core:breakpair' %}"> <button class="boton" type="button">Romper pareja</button></a>
                 {% endif %}
             {% endif %}
         {% endif %}

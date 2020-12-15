@@ -10,8 +10,8 @@
         {{pareja_mismo_usuario}}
 
     {% else %}
-    <p>Select the second</p>
-    <div>
+    <p class="contenido">Select the second</p>
+    <div class="contenido">
         <form id="eleccion" name="eleccion" method="POST" action="{% url 'core:applypair' %}">
             {% csrf_token %}
             <label for="companero">Elige un compañero:</label>
@@ -22,7 +22,7 @@
                 {% endfor %}
             </select> 
 
-            <input type="submit" value="Elegir" />
+            <input class="boton" type="submit" value="Elegir" />
         </form>
     </div>
     {%endif%}

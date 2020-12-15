@@ -18,14 +18,14 @@
         </div>
         <br/>
         <div id="lista">
-            <ul>
                 {% if user.is_authenticated %}
-                    <li><a class="lista" href="{% url 'logout' %}">Logout</a></li>
+                <a class="lista" href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                    <li><a class="lista" href="{% url 'login' %}">Login</a></li>
+                <a class="lista" href="{% url 'login' %}">Login</a></li>
                 {% endif %}
-                    <li><a class="lista" href="{% url 'core:home' %}">Index</a></li>
-            </ul>
+                <a class="lista" href="{% url 'core:home' %}">Index</a></li>
         </div>
+        <br>
+        <div class="derechos">Desarrollado por Elena y Ángel (All rights reserved)</div>
     </body>
 </html>

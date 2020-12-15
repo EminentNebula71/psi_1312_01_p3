@@ -7,8 +7,8 @@
 {% block body_block %}
     <h1>Break Pair</h1>
     
-    <p>Select the pair to be</p>
-    <div>
+    <p class="contenido">Select the pair to be</p>
+    <div class="contenido">
         <form id="break" name="break" method="POST" action="{% url 'core:breakpair' %}">
             {% csrf_token %}
             <label for="companero">Elige la pareja que quiere romper:</label>
@@ -19,7 +19,7 @@
                 {% endfor %}
             </select> 
 
-            <input type="submit" value="Elegir" />
+            <input class="button" type="submit" value="Elegir" />
         </form>
         {{ error_breakpair }}
     </div>
