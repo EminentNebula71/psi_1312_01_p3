@@ -14,9 +14,9 @@
             </br>
             Apellidos: <div id="apellidos">{{ user.last_name }}</div>
             </br>
-            Estado de convalidación: <div id="grupo">{{ user.convalidationGranted }}</div>
+            Estado de convalidación: <div id="informacion">{{ user.convalidationGranted }}</div>
             </br>
-            Grupo practicas: <div id="grupo">{{ user.labGroup }}</div>
+            Grupo practicas: <div id="informacion">{{ user.labGroup }}</div>
             </br>
             {% for p in pairs %}
                 {% if user.id == p.student1.id or user.id == p.student2.id%}

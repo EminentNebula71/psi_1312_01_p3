@@ -88,13 +88,30 @@ div.informacion {
 #grupo {
     background-image: linear-gradient(to right, darkmagenta, rgb(0, 110, 255));
     color: white;
-    widows: 30px;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: bold;
     border-radius: 5px;
+    border: none;
 }
 
-#colegas, #seleccion{
-    background-image: linear-gradient(to right, rgb(0, 110, 255), darkmagenta);
-    color: red;
+#informacion {
+    background-image: linear-gradient(to right, darkmagenta, rgb(0, 110, 255));
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+}
+
+.elegir {
+    background-image:linear-gradient(to right, darkmagenta, rgb(0, 110, 255));
+    color:white;
+    padding: 14px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+    width: 150px;
+    border: none;
+    transition-duration: 0.4s;
+    font-size: 15px;
 }

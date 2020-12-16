@@ -197,8 +197,9 @@ def breakpair(request):
                 pair = Pair.objects.get(id=pair_id)
                 if (pair.validated==False):
                     pair.delete()
-                    request.user.es_pareja = 0
-                    request.user.save()
+                    if (Pair.objects.filter(student1=request.user, validated=False).exists() == False and Pair.objects.filter(student2=request.user, validated=False).exists() == False):
+                        request.user.es_pareja = 0
+                        request.user.save()
                 else:
                     if(pair.studentBreakRequest is None):
                         pair.studentBreakRequest = request.user
