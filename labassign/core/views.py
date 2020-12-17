@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-import requests
 
 
 def home(request):
@@ -90,7 +89,7 @@ def applypair(request):
     if request.user.es_pareja == 1:
         return redirect(reverse('core:home'))
 
-    if request.user.convalidationGranted == True:
+    if request.user.convalidationGranted is True:
         convalidado = "Ya estás convalidado"
         students = Student.objects.all().exclude(es_pareja_validada=1)
         students_final = students.exclude(username=request.user.username)
@@ -123,9 +122,10 @@ def elegir_grupo(request):
         user1 = request.user
         grupo_id = request.POST.get("grupo")
         grupo = LabGroup.objects.get(id=grupo_id)
-        if GroupConstraints.objects.filter(labGroup=grupo, theoryGroup=user1.theoryGroup).exists() == False:
-            grupo_student = request.user.theoryGroup
-            grupos_lab = GroupConstraints.objects.filter(theoryGroup=grupo_student)
+        if GroupConstraints.objects.filter(labGroup=grupo,
+                                           theoryGroup=user1.theoryGroup).exists() is False:
+            grupo_std = request.user.theoryGroup
+            grupos_lab = GroupConstraints.objects.filter(theoryGroup=grupo_std)
             for g in grupos_lab:
                 if g.labGroup.counter >= g.labGroup.maxNumberStudents:
                     grupos_lab = grupos_lab.exclude(id=g.id)
@@ -140,7 +140,8 @@ def elegir_grupo(request):
             context_dict['error'] = "Grupo de prácticas no válido"
             return render(request, 'core/elegir_grupo.html', context_dict)
 
-        if(Pair.objects.filter(student1=user1, validated=True).exists() == True):
+        if(Pair.objects.filter(student1=user1,
+                               validated=True).exists() is True):
             user2 = Pair.objects.get(student1=user1, validated=True).student2
             if((grupo.maxNumberStudents-grupo.counter) >= 2):
                 user1.labGroup = grupo
@@ -152,7 +153,8 @@ def elegir_grupo(request):
                 grupo.counter += 2
                 grupo.save()
 
-        elif(Pair.objects.filter(student2=user1, validated=True).exists() == True):
+        elif(Pair.objects.filter(student2=user1,
+                                 validated=True).exists() is True):
             user2 = Pair.objects.get(student2=user1, validated=True).student1
             if((grupo.maxNumberStudents-grupo.counter) >= 2):
                 user1.labGroup = grupo
@@ -191,37 +193,37 @@ def elegir_grupo(request):
 @login_required
 def breakpair(request):
     if request.method == "POST":
-        error=0
+        error = 0
         pair_id = request.POST.get("parejas")
         try:
-                pair = Pair.objects.get(id=pair_id)
-                if (pair.validated==False):
+            pair = Pair.objects.get(id=pair_id)
+            if pair.validated is False:
+                pair.delete()
+                request.user.es_pareja = 0
+                request.user.save()
+            else:
+                if(pair.studentBreakRequest is None):
+                    pair.studentBreakRequest = request.user
+                    pair.save()
+                elif (pair.studentBreakRequest is not None
+                      and pair.studentBreakRequest is not request.user):
                     pair.delete()
-                    if (Pair.objects.filter(student1=request.user, validated=False).exists() == False and Pair.objects.filter(student2=request.user, validated=False).exists() == False):
-                        request.user.es_pareja = 0
-                        request.user.save()
-                else:
-                    if(pair.studentBreakRequest is None):
-                        pair.studentBreakRequest = request.user
-                        pair.save()
-                    elif (pair.studentBreakRequest is not None and pair.studentBreakRequest is not request.user):
-                        pair.delete()
 
         except ObjectDoesNotExist:
             error = 1
-        
+
         parejas_user1 = Pair.objects.filter(student1=request.user)
-        parejas_user2= Pair.objects.filter(student2=request.user)
+        parejas_user2 = Pair.objects.filter(student2=request.user)
         parejas_user1 |= parejas_user2
         context_dict = {}
         context_dict['parejas_user'] = parejas_user1
         if error == 1:
             error_breakpair = 'Could not process your request'
             context_dict['error_breakpair'] = error_breakpair
-        return render(request, 'core/breakpair.html', context_dict)        
+        return render(request, 'core/breakpair.html', context_dict)
 
     parejas_user1 = Pair.objects.filter(student1=request.user)
-    parejas_user2= Pair.objects.filter(student2=request.user)
+    parejas_user2 = Pair.objects.filter(student2=request.user)
     parejas_user1 |= parejas_user2
     context_dict = {}
     context_dict['parejas_user'] = parejas_user1

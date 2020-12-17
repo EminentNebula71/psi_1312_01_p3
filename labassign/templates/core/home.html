@@ -35,6 +35,10 @@
         
             {% if user.es_pareja == 0 %}
                 {% if user.convalidationGranted == False %}
+                    <p>
+                        Para optar a la convalidación necesita una nota<br>
+                        mínima del año pasado de teoría de 3.0 y de prácticas 7.0
+                    </p>
                     <form  id="convalidation" method="POST" action="{% url 'core:convalidation' %}">
                         {% csrf_token %}
                         <input type="hidden" id="username" name="username" value={{user.username}} />
@@ -53,6 +57,8 @@
                         <a href="{% url 'core:breakpair' %}"> <button class="boton" type="button">Romper pareja</button></a>
                 {% endif %}
             {% endif %}
+        {% else %}
+            Bienvenido, por favor, inicie sesión.
         {% endif %}
     </div>
 {% endblock %}

@@ -1,21 +1,26 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
     <head lang="en">
+        <link rel="stylesheet" href="{% static "css/base.css" %}"/>
         <meta charset="UTF-8"/>
         <title>
             Login
         </title>
     </head>
     <body>
-        <div>
-            <h1>Login</h1>
+        <h1>Login</h1>
+        <div class="contenido">
             <p>Por favor autentiquese</p>
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="submit" />
+                <input class="boton" type="submit" value="submit" />
             </form>
+            <br>
+            <a class="boton" href="{% url 'core:home' %}">Home</a>
         </div>
-        <a href="{% url 'core:home' %}">Home</a>
+        <br>
+        <div class="derechos">Desarrollado por Elena y Ángel (All rights reserved)</div>
     </body>
 </html>

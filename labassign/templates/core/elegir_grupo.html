@@ -7,6 +7,10 @@
 {% block body_block %}
     <h1>Apply Group</h1>
     <p class="contenido"> Select the group you want to join to</p>
+    <p class="contenido">Elija su grupo de prácticas.<br>
+        Si tiene pareja su compañero también será introducido en el mismo.<br>
+        Solamente podrá optar a los grupos correspondientes a su grupo de teoría.
+    </p>
     <div class="contenido">
         {% if valido == 1 %}
         <form id="grupo_form" name="grupo_form" method="POST" action="{% url 'core:elegir_grupo' %}">

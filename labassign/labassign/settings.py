@@ -16,12 +16,12 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATABASE_URL = 'postgres://alumnodb:alumnodb@localhost:5432/psi'
-STATIC_PATH = os.path.join(BASE_DIR,'static')
+STATIC_DIR = os.path.join(BASE_DIR,'static')
 
 STATIC_URL = '/static/' # You may find this is already defined as such.
 
 STATICFILES_DIRS = (
-    STATIC_PATH,
+    STATIC_DIR,
 )
 
 # Log In Log Out process
@@ -38,7 +38,7 @@ SECRET_KEY = '*0s+n29rcr=zkorv0aa+6q42!a$%*1jtnpfn83hel@ni_(sxbk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'sleepy-bastion-07329.herokuapp.com', u'localhost', u'127.0.0.1']
+ALLOWED_HOSTS = [u'damp-peak-71153.herokuapp.com', u'localhost', u'127.0.0.1']
 
 
 # Application definition
@@ -141,3 +141,4 @@ import dj_database_url
 DATABASES['default']= dj_database_url.config(default='postgres://alumnodb:alumnodb@localhost:5432/psi')
 """
 #STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticHeroku')

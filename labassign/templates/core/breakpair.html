@@ -9,6 +9,7 @@
     
     <p class="contenido">Select the pair to be</p>
     <div class="contenido">
+        Si la pareja está validada su compañero tendrá que hacer el mismo proceso y romper la pareja.
         <form id="break" name="break" method="POST" action="{% url 'core:breakpair' %}">
             {% csrf_token %}
             <label for="companero">Elige la pareja que quiere romper:</label>

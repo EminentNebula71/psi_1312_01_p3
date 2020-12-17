@@ -11,6 +11,8 @@
 
     {% else %}
     <p class="contenido">Select the second</p>
+    <p class="contenido">Por favor, elija su compañero de prácticas.<br>
+    Para que la pareja sea validada su compañero deberá volver a hacer el proceso y elegirlo.</p>
     <div class="contenido">
         <form id="eleccion" name="eleccion" method="POST" action="{% url 'core:applypair' %}">
             {% csrf_token %}
